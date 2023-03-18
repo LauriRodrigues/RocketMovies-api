@@ -5,7 +5,7 @@ export class MoviesController {
     const { title, description, rating, tags } = request.body
     const { user_id } = request.params
 
-    const note_id = await knex('movie_notes').insert({
+    const [note_id] = await knex('movie_notes').insert({
       title,
       description,
       rating,
@@ -63,13 +63,13 @@ export class MoviesController {
         .whereLike("movie_notes.title", `%${title}%`)
         .whereIn('name', filterTags)
         .innerJoin("movie_notes", "movie_notes.id", "movie_tags.note_id")
-        .orderBy("movie_notes.title")
+        .orderBy("movie_notes.title") 
 
     } else {
         notes = await knex('movie_notes')
         .where({ user_id })
         .whereLike('title', `%${title}%`)
-        .orderBy('title')
+        .orderBy('title') 
       }
 
     const userTags = await knex('movie_tags').where({ user_id })
